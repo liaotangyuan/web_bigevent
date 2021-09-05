@@ -56,7 +56,7 @@ function renderAvater(user) {
         $('.text-avater').hide();
     } else {
         // 没有图片头像则渲染显示文字头像
-        let first = name[0].toUpperCase()
+        let first = name[0].toUpperCase()   // 拿到用户名的第一个字符转成大写
         $('.text-avater').html(first).show();
         // 隐藏图片头像
         $('.layui-nav-img').hide()

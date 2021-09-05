@@ -1,0 +1,8 @@
+
+body {
+    padding: 15px;
+    background-color: #eee;
+}
+.layui-input {
+    width: 390px;
+}

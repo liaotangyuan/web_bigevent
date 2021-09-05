@@ -2,11 +2,12 @@
 // 在这个函数中，可以拿到我们给Ajax提供的配置对象
 $.ajaxPrefilter(function(options) {
     // 在真正发起Ajax请求之前，统一拼接上请求的根路径
-    options.url = 'http://api-breakingnews-web.itheima.net' + options.url;
+    var url_api = 'http://api-breakingnews-web.itheima.net'
+    options.url = url_api + options.url
     
     // 统一为有权限的接口，设置headers请求头
     if(options.url.indexOf('/my/') !== -1) {
-        options.Headers = {
+        options.headers = {
             Authorization: localStorage.getItem('token') || ''
         }
     }

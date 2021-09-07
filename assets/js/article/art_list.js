@@ -48,7 +48,7 @@ $(function () {
                 $('tbody').html(htmlStr)
                 // 渲染完表格数据后重新渲染分页的结构
                 renderPage(res.total)
-
+                
             }
         })
     }

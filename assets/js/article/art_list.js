@@ -21,6 +21,7 @@ $(function () {
 
         return y + '-' + m + '-' + d + ' ' + hh + ':' + mm + ':' + ss
     }
+
     // 定义一个查询的参数对象，将来请求数据的时候，需要按照它的要求请求服务器数据
     var q = {
         pagenum: '1',  // 页码值，默认第一页数据
@@ -29,8 +30,8 @@ $(function () {
         state: ''  // 文章的发布状态
     }
 
-    initTable();
-    initCate();
+    initTable();    // 渲染表格数据
+    initCate();     // 初始化文章分类可选信息
 
     // 发起ajax数据请求渲染页面数据
     function initTable() {
@@ -42,7 +43,6 @@ $(function () {
                 if (res.status !== 0) {
                     return layer.msg('获取文章列表数据失败！')
                 }
-                console.log(res.data);
                 // 使用模板引擎渲染页面数据
                 let htmlStr = template('tpl-table', res)
                 $('tbody').html(htmlStr)
@@ -72,11 +72,11 @@ $(function () {
     }
 
     // 为筛选表单区域的筛选按钮绑定submit事件
-    $('#form-seach').on('submit', '.layui-btn', function (e) {
+    $('.layui-btn').on('submit', function (e) {
         e.preventDefault();
         // 1.获取表单项中选择的值
         let cate_id = $('[name=cate_id]').val()
-        let state = $('[name=state]').val()
+        let state = $('[name=state]').val();
         // 2.为查询的参数对象q的对应属性赋值
         q.cate_id = cate_id
         q.state = state
@@ -102,7 +102,7 @@ $(function () {
                 q.pagenum = obj.curr
 
                 //  把最新的条目数，赋值给参数对象q
-                q.pagenum = obj.limit
+                q.pagesize = obj.limit
 
                 // 如果是第二种方式触发的jump则不调用initTable()函数，否则会成死循环
                 if (!first) {
@@ -112,4 +112,47 @@ $(function () {
             }
         });
     }
+
+    // 通过事件代理给删除文章的按钮绑定点击事件
+    $('tbody').on('click', '.btn-delete', function() {
+        // 拿到当前页面表格中一共有的删除个数
+        var len = $('.btn-delete').length
+        // 先拿到被点击的该条数据的id
+        var id = $(this).attr('data-id')
+        // 调用layer.confirm()弹出询问框
+        layer.confirm('确认删除?', {icon: 3, title:'提示'}, function(index){
+            $.ajax({
+                method: 'GET',
+                url: '/my/article/delete/'+id,
+                success: function(res) {
+                    if(res.status !== 0) {
+                        return layer.msg('删除文章失败！')
+                    }
+                    layer.msg('删除文章成功！')
+                    // 这里要先判断我们当前执行了删除后页面上是否还有剩余的数据
+                    // 如果当前页的数据删完了再调用initTable函数渲染页面前需先将页码值减1(第一页不减)
+                    if(len === 1) {
+                        // 如果当前已经在第一页了那页码就不能再减1了
+                        q.pagenum = q.pagenum === 1 ? 1 : q.pagenum - 1
+                    }
+                    initTable();
+                }
+            })
+            layer.close(index);
+          });
+    })
+
+    // 通过事件代理给编辑文章的按钮绑定点击事件
+    $('tbody').on('click', '#btn-edit', function() {
+        // 拿到当前被点击的该条数据的id
+        var id = $(this).next('.btn-delete').attr('data-id')
+        // 将该数据id存储到本地存储中
+        localStorage.setItem('thisId', id)
+        console.log(id);
+        // 跳转到文章编辑页面
+        location.href = '/article/art_list_edit.html'
+        
+    })
+
+    
 })

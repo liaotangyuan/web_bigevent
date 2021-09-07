@@ -76,7 +76,6 @@ $(function () {
     // 通过事件代理为弹出编辑分类的form表单绑定submit事件
     $('body').on('submit', '#form-edit', function(e) {
         e.preventDefault();
-        console.log('ok');
         $.ajax({
             method: 'POST',
             url: '/my/article/updatecate',

@@ -2,6 +2,29 @@ $(function () {
     var form = layui.form
     var layer = layui.layer
 
+    // 根据本地存储中的thisId值发起Ajax请求渲染文章信息
+    var editId = localStorage.getItem('thisId');
+    localStorage.removeItem('thisId')
+    $.ajax({
+        method: 'GET',
+        url: '/my/article/' + editId,
+        success: function (res) {
+            if (res.status !== 0) {
+                return layer.msg('获取文章信息失败！')
+            }
+            console.log(res);
+            form.val('form-edit', res.data)
+            // 根据文件，创建对应的URL地址
+            var newImgURL = 'http://api-breakingnews-web.itheima.net' + res.data.cover_img
+
+            // 3. 先`销毁`旧的裁剪区域，再`重新设置图片路径`，之后再`创建新的裁剪区域`：
+            $image
+                .cropper('destroy')      // 销毁旧的裁剪区域
+                .attr('src', newImgURL)  // 重新设置图片路径
+                .cropper(options)        // 重新初始化裁剪区域
+        }
+    })
+
     initCate();
 
     // 初始化富文本编辑器
@@ -37,6 +60,9 @@ $(function () {
     // 3. 初始化裁剪区域
     $image.cropper(options)
 
+
+
+
     // 为选择文章封面的按钮绑定点击事件
     $('#btnChooseImage').on('click', function () {
         // 代码触发真正的文件上传框的点击事件
@@ -66,6 +92,17 @@ $(function () {
     $('#btn-caogao').on('click', function () {
         art_state = '草稿'
     })
+
+
+
+    // var formStr = $('#form-pub').serialize();
+    // formStr = formStr.split('&')
+    // var formObj = {}
+    // for(let i of formStr) {
+    //     let arr = i.split('=');
+    //     formObj[arr[0]] = arr[1];
+    // }
+
     // 为表单绑定submit提交事件
     $('#form-pub').on('submit', function (e) {
         // 1.阻止默认提交行为
@@ -92,16 +129,16 @@ $(function () {
     function publishArticle(fd) {
         $.ajax({
             method: 'POST',
-            url: '/my/article/add',
+            url: '/my/article/edit',
             data: fd,
             // 注意：如果向服务器提交的是 FormData 格式的数据必须添加以下两个配置项
             contentType: false,
             processData: false,
-            success: function(res) {
-                if(res.status !== 0) {
-                    return layer.msg('发布文章失败！')
+            success: function (res) {
+                if (res.status !== 0) {
+                    return layer.msg('文章更新失败！')
                 }
-                layer.msg('发布文章成功！')
+                layer.msg('文章更新成功！')
                 // 发布文章成功后跳转到文章列表页面
                 location.href = '/article/art_list.html'
             }

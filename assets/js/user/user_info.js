@@ -31,14 +31,14 @@ $(function () {
     // 重置表单的数据
     $('#btnReset').on('click'), function(e) {
         // 阻止表单默认提交行为
-        e.preventDefalut()
+        e.preventDefault()
         initUserInfo(); // 重新初始化一次用户信息即可
     }
 
     // 监听表单的提交事件
     $('.layui-form').on('submit', function (e) {
         // 阻止表单默认提交行为
-        e.preventDefalut();
+        e.preventDefault();
         // 发起ajax请求
         $.ajax({
             method: 'POST',

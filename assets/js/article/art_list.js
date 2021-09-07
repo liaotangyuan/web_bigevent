@@ -72,7 +72,7 @@ $(function () {
     }
 
     // 为筛选表单区域的筛选按钮绑定submit事件
-    $('.layui-btn').on('submit', function (e) {
+    $('.form-seach').on('submit', '.layui-btn', function (e) {
         e.preventDefault();
         // 1.获取表单项中选择的值
         let cate_id = $('[name=cate_id]').val()

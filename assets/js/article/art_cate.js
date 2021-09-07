@@ -85,7 +85,8 @@ $(function () {
                     return layer.msg('更新分类数据失败！')
                 }
                 layer.msg('更新分类数据成功！')
-                layer.close(indexEdit);initArtCateList();
+                layer.close(indexEdit);
+                initArtCateList();
             }
         })
     })

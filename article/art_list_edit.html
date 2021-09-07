@@ -14,11 +14,14 @@
 <body>
     <!-- 卡片区域 -->
     <div class="layui-card">
-        <div class="layui-card-header">文章列表-编辑文章信息</div>
+        <div class="layui-card-header">
+            <a href="/article/art_list.html">文章列表</a>-编辑文章信息</div>
         <div class="layui-card-body">
             <!-- form表单区域 -->
-            <form class="layui-form" id="form-pub">
+            <form class="layui-form" id="form-pub" lay-filter="form-edit">
                 <!-- 第一行 -->
+                <!-- 创建一个隐藏域保存id值 -->
+                <input type="hidden" name="Id">
                 <div class="layui-form-item">
                     <label class="layui-form-label">文章标题</label>
                     <div class="layui-input-block">
@@ -68,7 +71,8 @@
                   <div class="layui-form-item">
                     <div class="layui-input-block">
                       <button class="layui-btn" lay-submit>提交</button>
-                      <button class="layui-btn" lay-submit>返回</button>
+                      <button class="layui-btn layui-btn-primary" lay-submit id="btn-caogao">存为草稿</button>
+                      <a href="/article/art_list.html" class="layui-btn">返回</a>
                     </div>
                   </div>
             </form>

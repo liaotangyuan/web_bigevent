@@ -22,28 +22,31 @@ $(function () {
                 if (res.status !== 0) {
                     return layer.msg('获取用户信息失败！')
                 }
-                // 调用form.val()快速为表单赋值
-                form.val('formUserInof', res.data)
+                console.log(res);
+                // 逐一为为表单赋值(逐一id也需要，因为后续提交时需要用到id)
+                $('[name=id]').val(res.data.id)
+                $('[name=username]').val(res.data.username)
+                $('[name=nickname]').val(res.data.nickname)
+                $('[name=email]').val(res.data.email)
             }
         })
     }
 
     // 重置表单的数据
-    $('#btnReset').on('click'), function(e) {
-        // 阻止表单默认提交行为
-        e.preventDefault()
-        initUserInfo(); // 重新初始化一次用户信息即可
-    }
+    $('#btnReset').on('click', () => initUserInfo() // 重新初始化一次用户信息即可
+    )
 
     // 监听表单的提交事件
     $('.layui-form').on('submit', function (e) {
         // 阻止表单默认提交行为
         e.preventDefault();
+        var formVal = $(this).serialize()
+        console.log(formVal);
         // 发起ajax请求
         $.ajax({
             method: 'POST',
             url: '/my/userinfo',
-            data: $(this).serialize(),
+            data: formVal,
             success: function (res) {
                 if (res.status !== 0) {
                     return layer.msg('修改用户信息失败！')
@@ -51,6 +54,7 @@ $(function () {
                 layer.msg('修改用户信息成功！')
                 // 调用父页面index.html中的方法重新渲染用户信息
                 window.parent.getUserInfo();
+                initUserInfo();
             }
         })
     })

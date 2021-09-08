@@ -1,5 +1,28 @@
 $(function () {
     var layer = layui.layer
+    refThisUserAvatar();
+    // 获取当前用户的头像设置到头像框中
+    function refThisUserAvatar() {
+        $.ajax({
+            method: 'GET',
+            url: '/my/userinfo',
+            // 原本此处添加请求头的代码已经全部移到了baseAPI.js中统一处理了
+            success: function (res) {
+                if (res.status !== 0) {
+                    return layer.msg('获取原头像信息失败！')
+                }
+                // 获取到当前用户的头像
+                var imgURL = res.data.user_pic
+                // 重新初始化裁剪区域
+                $image
+                    .cropper('destroy')      // 销毁旧的裁剪区域
+                    .attr('src', imgURL)     // 重新设置图片路径
+                    .cropper(options)        // 重新初始化裁剪区域
+            },
+
+        })
+    }
+
 
     // 1.1 获取裁剪区域的 DOM 元素
     var $image = $('#image')
@@ -56,12 +79,13 @@ $(function () {
             data: {
                 avatar: dataURL
             },
-            success: function(res) {
-                if(res.status !== 0) {
+            success: function (res) {
+                if (res.status !== 0) {
                     return layer.msg('更换头像失败！')
                 }
                 layer.msg('更换头像成功！')
                 // 重新渲染index.html中的用户数据
+                refThisUserAvatar();
                 window.parent.getUserInfo();
             }
         })

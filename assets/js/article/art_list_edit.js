@@ -12,7 +12,6 @@ $(function () {
             if (res.status !== 0) {
                 return layer.msg('获取文章信息失败！')
             }
-            console.log(res);
             form.val('form-edit', res.data)
             // 根据文件，创建对应的URL地址
             var newImgURL = 'http://api-breakingnews-web.itheima.net' + res.data.cover_img

@@ -66,8 +66,11 @@ $(function () {
             method: 'GET',
             url: '/my/article/cates/'+id,
             success: function(res) {
+                console.log(res);
                 // 将获取到的数据渲染到弹出层中
-                form.val('form-edit', res.data)
+                $('[name=Id]').val(res.data.Id)
+                $('[name=name]').val(res.data.name)
+                $('[name=alias]').val(res.data.alias)
             }
         })
 
